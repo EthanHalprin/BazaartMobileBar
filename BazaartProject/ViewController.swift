@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     var mbvOriginPoint: CGPoint!
     var ports = [Port]()
     var isLogged = false
+    var portSize: CGFloat!
     //
 
     override func viewDidAppear(_ animated: Bool) {
@@ -41,7 +42,8 @@ class ViewController: UIViewController {
         //Ethan
 
         // Build Ports and add gestures
-        setPorts(canvas)
+        portSize = canvasView.bounds.width / 5.0
+        setPorts()
 
         // Build the Mobile Bar
         mobileBarView = MobileBarView(frame: CGRect(x: 0, y: 0, width: 50, height: 140))
@@ -93,16 +95,25 @@ extension ViewController {
     //
     // Anchors
     //
-    func setPorts(_ parent: UIView) {
-        let port1 = UIView(frame: CGRect(x: 0,
-                                         y: 0,
-                                         width: parent.bounds.width / 5.0,
-                                         height: parent.bounds.height / 5.0))
+    func setPorts() {
+        guard let _ = self.portSize else {
+            fatalError("Port size nil")
+        }
+        addPort(origin: CGPoint.zero)
+        addPort(origin: CGPoint(x: canvasView.bounds.width / 2.0 - portSize / 2.0, y: 0))
+        
+    }
+    
+    func addPort(origin: CGPoint) {
+        let port1 = UIView(frame: CGRect(x: origin.x,
+                                         y: origin.y,
+                                         width: portSize,
+                                         height: portSize))
         port1.backgroundColor = UIColor.yellow
         port1.layer.cornerRadius = 12
         port1.layer.borderWidth = 2
         port1.layer.borderColor = UIColor.black.cgColor
-        parent.addSubview(port1)
+        canvasView.addSubview(port1)
         self.ports.append(port1)
     }
     //
