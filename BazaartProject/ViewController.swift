@@ -99,9 +99,23 @@ extension ViewController {
         guard let _ = self.portSize else {
             fatalError("Port size nil")
         }
-        addPort(origin: CGPoint.zero)
-        addPort(origin: CGPoint(x: canvasView.bounds.width / 2.0 - portSize / 2.0, y: 0))
+        let width  = canvasView.bounds.width
+        let height = canvasView.bounds.height
         
+        // Top-Left
+        addPort(origin: CGPoint.zero)
+        // Top-Middle
+        addPort(origin: CGPoint(x: width / 2.0 - portSize / 2.0, y: 0))
+        // Top-Right
+        addPort(origin: CGPoint(x: width - portSize, y: 0))
+        // Middle-Left
+        addPort(origin: CGPoint(x: 0, y: height / 2.0 - portSize / 2.0))
+        // Middle-Right
+        addPort(origin: CGPoint(x: width - portSize, y: height / 2.0 - portSize / 2.0))
+        // Bottom-Left
+        addPort(origin: CGPoint(x: 0, y: height - portSize))
+        // Bottom-Right
+        addPort(origin: CGPoint(x: width - portSize, y: height - portSize))
     }
     
     func addPort(origin: CGPoint) {
@@ -167,7 +181,7 @@ extension ViewController {
     fileprivate func checkPortsLoggings(_ panView: UIView) {
         for port in self.ports {
             if panView.frame.intersects(port.frame) {
-                self.isLogged = true
+             //   self.isLogged = true
                 UIView.animateKeyframes(withDuration: 0.7,
                                         delay: 0.0,
                                         options: .allowUserInteraction,
