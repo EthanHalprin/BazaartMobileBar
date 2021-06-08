@@ -50,6 +50,12 @@ class MobileBarView: UIView {
         let radians = angle / 180.0 * CGFloat.pi
         let affineTransformation = self.transform.rotated(by: radians)
         self.transform = affineTransformation
+        
+        stackView.arrangedSubviews.forEach({ subView in
+            let rads = (360.0 - angle) / 180.0 * CGFloat.pi
+            let transformation = subView.transform.rotated(by: rads)
+            subView.transform = transformation
+        })
     }
 
     fileprivate func setup() {
