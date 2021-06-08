@@ -95,10 +95,14 @@ extension PortsManager {
                                          y: origin.y,
                                          width: portSize,
                                          height: portSize))
-        port.backgroundColor = UIColor.yellow
-        port.layer.cornerRadius = 12
-        port.layer.borderWidth = 2
-        port.layer.borderColor = UIColor.black.cgColor
+        //
+        // If you want to see the ports for Debugging purposes:
+        //
+        //        port.backgroundColor = UIColor.yellow
+        //        port.layer.cornerRadius = 12
+        //        port.layer.borderWidth = 2
+        //        port.layer.borderColor = UIColor.black.cgColor
+        //
         port.isHorizontal = horizontal
         canvas.addSubview(port)
         self.ports.append(port)
