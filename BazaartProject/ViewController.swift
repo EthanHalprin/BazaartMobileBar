@@ -41,7 +41,7 @@ class ViewController: UIViewController {
         //Ethan
 
         // Build Ports and add gestures
-        setPorts(canvas, x: canvas.frame.origin.x, y: canvas.frame.origin.y, width: width, height: height)
+        setPorts(canvas)
 
         // Build the Mobile Bar
         mobileBarView = MobileBarView(frame: CGRect(x: 0, y: 0, width: 50, height: 140))
@@ -93,8 +93,11 @@ extension ViewController {
     //
     // Anchors
     //
-    func setPorts(_ parent: UIView, x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) {
-        let port1 = UIView(frame: CGRect(x: x, y: y, width: width / 5.0, height:  height / 5.0))
+    func setPorts(_ parent: UIView) {
+        let port1 = UIView(frame: CGRect(x: 0,
+                                         y: 0,
+                                         width: parent.bounds.width / 5.0,
+                                         height: parent.bounds.height / 5.0))
         port1.backgroundColor = UIColor.yellow
         port1.layer.cornerRadius = 12
         port1.layer.borderWidth = 2
