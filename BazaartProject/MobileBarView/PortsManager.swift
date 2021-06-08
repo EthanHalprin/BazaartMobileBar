@@ -50,7 +50,7 @@ class PortsManager {
         var min: CGFloat = CGFloat(Int.max)
         
         self.ports.forEach({ port in
-            let distance = ComputeDistance(point, port.center)
+            let distance = distance(point, port.center)
             if distance < min  {
                 min = distance
                 nearest = port
@@ -108,7 +108,7 @@ extension PortsManager {
         self.ports.append(port)
     }
 
-    fileprivate func ComputeDistance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
+    fileprivate func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
         let A = abs(a.x - b.x)
         let B = abs(a.y - b.y)
         let C = sqrt(pow(A, 2) + pow(B, 2))
