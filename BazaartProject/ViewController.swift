@@ -45,8 +45,7 @@ class ViewController: UIViewController {
         setPorts()
 
         // Build the Mobile Bar
-        mobileBarView = MobileBarView(frame: CGRect(x: 0, y: 0, width: 50, height: 140))
-        mobileBarView.center = self.view.center
+        mobileBarView = MobileBarView(frame: CGRect(x: 0.0, y: 0.0, width: 35, height: 100))
         canvas.addSubview(mobileBarView)
         mobileBarView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         mobileBarView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
@@ -113,6 +112,8 @@ extension ViewController {
         addPort(origin: CGPoint(x: width - portSize, y: height / 2.0 - portSize / 2.0))
         // Bottom-Left
         addPort(origin: CGPoint(x: 0, y: height - portSize))
+        // Bottom-Middle
+        addPort(origin: CGPoint(x: width / 2.0 - portSize / 2.0, y: height - portSize))
         // Bottom-Right
         addPort(origin: CGPoint(x: width - portSize, y: height - portSize))
     }
