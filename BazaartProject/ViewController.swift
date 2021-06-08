@@ -11,13 +11,12 @@ class ViewController: UIViewController {
 
     private var canvasView: CanvasView!
     
-    //Ethan
+    //---Ethan-------------
     var mobileBarView: MobileBarView!
     var mbvOriginPoint: CGPoint!
     var ports = [Port]()
-    var isLogged = false
     var portSize: CGFloat!
-    //
+    //---------------------
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -39,7 +38,7 @@ class ViewController: UIViewController {
             return CGPoint(x: prev.x + btn.bounds.width + margin, y: prev.y)
         }
         
-        //Ethan
+        //---Ethan-------------
 
         // Build Ports and add gestures
         portSize = canvasView.bounds.width / 5.0
@@ -52,7 +51,7 @@ class ViewController: UIViewController {
         mobileBarView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         mobileBarView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         addPanGesture(mobileBarView)
-        //
+        //---------------------
     }
     
     private func addButton() -> UIButton {
@@ -89,7 +88,7 @@ class ViewController: UIViewController {
     }
 }
 
-//Ethan
+//---Ethan-------------
 typealias Port = UIView
 extension ViewController {
     //
@@ -141,9 +140,6 @@ extension ViewController {
     }
 
     @objc func handlePan(sender: UIPanGestureRecognizer) {
-        guard !self.isLogged else {
-            return
-        }
         
         // this is the moving view
         guard let panView = sender.view else {
@@ -179,19 +175,51 @@ extension ViewController {
     }
     
     fileprivate func checkPortsLoggings(_ panView: UIView) {
-        for port in self.ports {
-            if panView.frame.intersects(port.frame) {
-             //   self.isLogged = true
-                UIView.animateKeyframes(withDuration: 0.7,
-                                        delay: 0.0,
-                                        options: .allowUserInteraction,
-                                        animations: {
-                                            panView.center = port.center
-                                        },
-                                        completion: { _ in
-                                        })
+        
+        var intersected: Int?
+        var i = 0
+        
+        while intersected == nil && i<ports.count {
+            if panView.frame.intersects(ports[i].frame) {
+                intersected = i
+            } else {
+                i += 1
             }
         }
+        var destination: Port?
+        if let intersect = intersected {
+            destination = self.ports[intersect]
+        } else {
+            destination = getRelativeNearPort(panView.center)
+        }
+            
+        UIView.animateKeyframes(withDuration: 0.7,
+                                delay: 0.0,
+                                options: .allowUserInteraction,
+                                animations: { panView.center = destination!.center },
+                                completion: { _ in })
+   }
+    
+    func getRelativeNearPort(_ point: CGPoint) -> Port {
+        var nearest = Port()
+        var min: CGFloat = CGFloat(Int.max)
+        
+        self.ports.forEach({ port in
+            let distance = ComputeDistance(point, port.center)
+            if distance < min  {
+                min = distance
+                nearest = port
+            }
+        })
+        
+        return nearest
+    }
+    
+    func ComputeDistance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
+        let A = abs(a.x - b.x)
+        let B = abs(a.y - b.y)
+        let C = sqrt(pow(A, 2) + pow(B, 2))
+        return C
     }
 }
-//
+//---------------------
