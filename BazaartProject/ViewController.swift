@@ -104,9 +104,7 @@ extension ViewController {
         // Top-Left
         addPort(origin: CGPoint.zero)
         // Top-Middle
-        addPort(origin: CGPoint(x: width / 2.0 - portSize / 2.0, y: 0))
-        horiztalPointTop.x = width / 2.0 - portSize / 2.0
-        horiztalPointTop.y = 0
+        addPort(origin: CGPoint(x: width / 2.0 - portSize / 2.0, y: 0), horizontal: true)
         // Top-Right
         addPort(origin: CGPoint(x: width - portSize, y: 0))
         // Middle-Left
@@ -116,24 +114,23 @@ extension ViewController {
         // Bottom-Left
         addPort(origin: CGPoint(x: 0, y: height - portSize))
         // Bottom-Middle
-        addPort(origin: CGPoint(x: width / 2.0 - portSize / 2.0, y: height - portSize))
-        horiztalPointBottom.x = width / 2.0 - portSize / 2.0
-        horiztalPointBottom.y = height - portSize
+        addPort(origin: CGPoint(x: width / 2.0 - portSize / 2.0, y: height - portSize), horizontal: true)
         // Bottom-Right
         addPort(origin: CGPoint(x: width - portSize, y: height - portSize))
     }
     
-    func addPort(origin: CGPoint) {
-        let port1 = PortView(frame: CGRect(x: origin.x,
+    func addPort(origin: CGPoint, horizontal: Bool = false) {
+        let port = PortView(frame: CGRect(x: origin.x,
                                          y: origin.y,
                                          width: portSize,
                                          height: portSize))
-        port1.backgroundColor = UIColor.yellow
-        port1.layer.cornerRadius = 12
-        port1.layer.borderWidth = 2
-        port1.layer.borderColor = UIColor.black.cgColor
-        canvasView.addSubview(port1)
-        self.ports.append(port1)
+        port.backgroundColor = UIColor.yellow
+        port.layer.cornerRadius = 12
+        port.layer.borderWidth = 2
+        port.layer.borderColor = UIColor.black.cgColor
+        port.isHorizontal = horizontal
+        canvasView.addSubview(port)
+        self.ports.append(port)
     }
     //
     // Pan Gesture
@@ -207,7 +204,9 @@ extension ViewController {
                                 options: .allowUserInteraction,
                                 animations: {
                                     panView.center = destination!.center
-                                    panView.rotate(angle: 90.0)
+                                    if destination!.isHorizontal {
+                                        panView.rotate(angle: 90.0)
+                                    }
                                 },
                                 completion: { _ in })
    }

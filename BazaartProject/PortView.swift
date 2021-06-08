@@ -8,5 +8,5 @@
 import Foundation
 
 class PortView: UIView {
-    
+    var isHorizontal: Bool = false
 }
