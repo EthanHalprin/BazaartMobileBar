@@ -18,6 +18,7 @@ class PortsManager {
         portSize = size
     }
     
+    /// build ports (rects) in 8 places on the edges of Canvas
     func setPorts() {
         guard let _ = self.portSize else {
             fatalError("Port size nil")
@@ -43,6 +44,7 @@ class PortsManager {
         addPort(origin: CGPoint(x: width - portSize, y: height - portSize))
     }
     
+    /// Find nearest port to the given point (by distance calculation - Pythagors)
     func getRelativeNearPort(_ point: CGPoint) -> PortView? {
         var nearest: PortView?
         var min: CGFloat = CGFloat(Int.max)
@@ -57,6 +59,32 @@ class PortsManager {
         
         return nearest
     }
+    
+    /// Look for intersected port with given view. If not found - compute the nearest one
+    func scanPortsIntersections(for panView: MobileBarView) -> PortView? {
+        var intersected: Int?
+        var i = 0
+        
+        while intersected == nil && i<ports.count {
+            if panView.frame.intersects(ports[i].frame) {
+                intersected = i
+            } else {
+                i += 1
+            }
+        }
+        var destinationPort: PortView?
+        if let intersect = intersected {
+            destinationPort = ports[intersect]
+        } else {
+            guard let port = getRelativeNearPort(panView.center) else {
+                fatalError("Nearest PortView nil")
+            }
+            destinationPort = port
+        }
+        
+        return destinationPort
+    }
+
 }
 
 // MARK: - PortsManager Extension - Aux

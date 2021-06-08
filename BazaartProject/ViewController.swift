@@ -144,39 +144,24 @@ extension ViewController {
             //
             // Ports Check
             //
-            checkPortsLoggings(panView as! MobileBarView)
+            checkPortsIntersect(panView as! MobileBarView)
         default:
             break
         }
     }
     
-    fileprivate func checkPortsLoggings(_ panView: MobileBarView) {
-        var intersected: Int?
-        var i = 0
-        
-        while intersected == nil && i<portsManager.ports.count {
-            if panView.frame.intersects(portsManager.ports[i].frame) {
-                intersected = i
-            } else {
-                i += 1
-            }
-        }
-        var destinationPort: PortView?
-        if let intersect = intersected {
-            destinationPort = portsManager.ports[intersect]
-        } else {
-            guard let port = portsManager.getRelativeNearPort(panView.center) else {
-                fatalError("Nearest PortView nil")
-            }
-            destinationPort = port
+    fileprivate func checkPortsIntersect(_ panView: MobileBarView) {
+
+        guard let nearestPort = portsManager.scanPortsIntersections(for: panView) else {
+            fatalError("No Nearest Port Found")
         }
             
         UIView.animateKeyframes(withDuration: 0.7,
                                 delay: 0.0,
                                 options: .allowUserInteraction,
                                 animations: {
-                                    panView.center = destinationPort!.center
-                                    if destinationPort!.isHorizontal {
+                                    panView.center = nearestPort.center
+                                    if nearestPort.isHorizontal {
                                         panView.setOrientation(.horizontal)
                                     } else {
                                         panView.setOrientation(.vertical)
