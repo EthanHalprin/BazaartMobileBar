@@ -19,6 +19,7 @@
 		5CB009592655322C009806C0 /* CanvasLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB009582655322C009806C0 /* CanvasLayer.swift */; };
 		AA4DC99D266E924400CABE20 /* MobileBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4DC99C266E924400CABE20 /* MobileBarView.swift */; };
 		AA5F0CB8266FB42800B403B9 /* PortView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5F0CB7266FB42800B403B9 /* PortView.swift */; };
+		AA5F0CBA266FEE7300B403B9 /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5F0CB9266FEE7300B403B9 /* Orientation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		5CB009582655322C009806C0 /* CanvasLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasLayer.swift; sourceTree = "<group>"; };
 		AA4DC99C266E924400CABE20 /* MobileBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileBarView.swift; sourceTree = "<group>"; };
 		AA5F0CB7266FB42800B403B9 /* PortView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortView.swift; sourceTree = "<group>"; };
+		AA5F0CB9266FEE7300B403B9 /* Orientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				AA4DC99C266E924400CABE20 /* MobileBarView.swift */,
+				AA5F0CB9266FEE7300B403B9 /* Orientation.swift */,
 			);
 			path = MobileBarView;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA5F0CBA266FEE7300B403B9 /* Orientation.swift in Sources */,
 				AA4DC99D266E924400CABE20 /* MobileBarView.swift in Sources */,
 				5CB0091B26552DC1009806C0 /* ViewController.swift in Sources */,
 				AA5F0CB8266FB42800B403B9 /* PortView.swift in Sources */,

@@ -4,25 +4,14 @@
 //
 //  Created by Ethan on 07/06/2021.
 //
-
-//---Ethan-------------
-
 import Foundation
-
-enum Orientation {
-    case horizontal
-    case vertical
-}
-
 
 class MobileBarView: UIView {
   
     fileprivate var stackView: UIStackView!
     fileprivate let buttonSize: CGFloat = 40.0
     var fileOriginPoint: CGPoint!
-    var ports = [Port]()
     var orientation = Orientation.vertical
-
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,20 +23,22 @@ class MobileBarView: UIView {
         setup()
     }
     
+    /// Rotate according to the input orientation
     func setOrientation(_ newOrientation: Orientation) {
         switch orientation {
         case .horizontal:
-            if newOrientation == .vertical {
-                rotate(angle: 90.0)
-            }
+            if newOrientation == .vertical   { rotate(angle: 90.0)  }
         case .vertical:
-            if newOrientation == .horizontal {
-                rotate(angle: 270.0)
-            }
+            if newOrientation == .horizontal { rotate(angle: 270.0) }
         }
         self.orientation = newOrientation
     }
+}
+
+// MARK: - MobileBarView Extension - Aux
+extension MobileBarView {
     
+    /// creates an affine transformation matrix and transform View + Subs by it
     fileprivate func rotate(angle: CGFloat) {
         let radians = angle / 180.0 * CGFloat.pi
         let affineTransformation = self.transform.rotated(by: radians)
@@ -60,6 +51,7 @@ class MobileBarView: UIView {
         })
     }
 
+    /// UI Builder
     fileprivate func setup() {
         backgroundColor = .white
         self.layer.cornerRadius = 12.0
@@ -87,10 +79,13 @@ class MobileBarView: UIView {
         button.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
         button.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
         button.setImage(UIImage(systemName: systemIcon), for: .normal)
-        //button.addTarget(self, action: #selector(onAddTouchUpInside), for: .touchUpInside)
         button.addTarget(self, action: selector, for: .touchUpInside)
         return button
     }
+}
+
+// MARK: - MobileBarView Extension - Notifications posts
+extension MobileBarView {
     
     @objc func onAddTouchUpInside() {
         NotificationCenter.default.post(name: Notification.Name("UserRequestAddLayer"), object: nil)
@@ -103,4 +98,3 @@ class MobileBarView: UIView {
     }
 
 }
-//---------------------

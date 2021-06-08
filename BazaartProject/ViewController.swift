@@ -11,14 +11,14 @@ class ViewController: UIViewController {
 
     private var canvasView: CanvasView!
     
-    //---Ethan-------------
+    //-------------------------------------
     var mobileBarView: MobileBarView!
     var mbvOriginPoint: CGPoint!
     var ports = [PortView]()
     var portSize: CGFloat!
     var horiztalPointTop = CGPoint.zero
     var horiztalPointBottom = CGPoint.zero
-    //---------------------
+    //-------------------------------------
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -40,33 +40,7 @@ class ViewController: UIViewController {
             return CGPoint(x: prev.x + btn.bounds.width + margin, y: prev.y)
         }
         
-        //---Ethan-------------
-
-        // Build Ports and add gestures
-        portSize = canvasView.bounds.width / 5.0
-        setPorts()
-
-        // Build the Mobile Bar
-        mobileBarView = MobileBarView(frame: CGRect(x: 0.0, y: 0.0, width: 35, height: 100))
-        canvas.addSubview(mobileBarView)
-        mobileBarView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        mobileBarView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        addPanGesture(mobileBarView)
-        
-        // Observe presses on MobileBar buttons
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(addDidPressed),
-                                               name: Notification.Name("UserRequestAddLayer"),
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(deleteDidPressed),
-                                               name: Notification.Name("UserRequestDeleteLayer"),
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(saveDidPressed),
-                                               name: Notification.Name("UserRequestSaveLayer"),
-                                               object: nil)
-        //---------------------
+        setUpMobileBar()
     }
     
     private func addButton() -> UIButton {
@@ -103,15 +77,33 @@ class ViewController: UIViewController {
     }
 }
 
-//---Ethan-------------
-protocol Layerable {
-    
-}
-
 extension ViewController {
-    //
-    // Anchors
-    //
+    func setUpMobileBar() {
+        // Build Ports and add gestures
+        portSize = canvasView.bounds.width / 5.0
+        setPorts()
+
+        // Build the Mobile Bar
+        mobileBarView = MobileBarView(frame: CGRect(x: 0.0, y: 0.0, width: 35, height: 100))
+        self.canvasView.addSubview(mobileBarView)
+        mobileBarView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        mobileBarView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        addPanGesture(mobileBarView)
+        
+        // Observe presses on MobileBar buttons
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(addDidPressed),
+                                               name: Notification.Name("UserRequestAddLayer"),
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(deleteDidPressed),
+                                               name: Notification.Name("UserRequestDeleteLayer"),
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(saveDidPressed),
+                                               name: Notification.Name("UserRequestSaveLayer"),
+                                               object: nil)
+    }
     func setPorts() {
         guard let _ = self.portSize else {
             fatalError("Port size nil")
@@ -136,7 +128,6 @@ extension ViewController {
         // Bottom-Right
         addPort(origin: CGPoint(x: width - portSize, y: height - portSize))
     }
-    
     func addPort(origin: CGPoint, horizontal: Bool = false) {
         let port = PortView(frame: CGRect(x: origin.x,
                                          y: origin.y,
@@ -150,16 +141,12 @@ extension ViewController {
         canvasView.addSubview(port)
         self.ports.append(port)
     }
-    //
-    // Pan Gesture
-    //
     func addPanGesture(_ view: UIView) {
         let pan = UIPanGestureRecognizer(target: self,
                                          action: #selector(ViewController.handlePan(sender:)))
         view.addGestureRecognizer(pan)
         view.isUserInteractionEnabled = true
     }
-
     @objc func handlePan(sender: UIPanGestureRecognizer) {
         
         // this is the moving view
@@ -194,7 +181,6 @@ extension ViewController {
             break
         }
     }
-    
     fileprivate func checkPortsLoggings(_ panView: MobileBarView) {
         
         var intersected: Int?
@@ -230,7 +216,6 @@ extension ViewController {
                                 },
                                 completion: { _ in })
    }
-    
     func getRelativeNearPort(_ point: CGPoint) -> PortView? {
         var nearest: PortView?
         var min: CGFloat = CGFloat(Int.max)
@@ -245,7 +230,6 @@ extension ViewController {
         
         return nearest
     }
-    
     func ComputeDistance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
         let A = abs(a.x - b.x)
         let B = abs(a.y - b.y)
@@ -253,7 +237,3 @@ extension ViewController {
         return C
     }
 }
-
-// MARK: - Port Extension -
-
-//---------------------
