@@ -189,23 +189,25 @@ extension ViewController {
                 i += 1
             }
         }
-        var destination: PortView?
+        var destinationPort: PortView?
         if let intersect = intersected {
-            destination = self.ports[intersect]
+            destinationPort = self.ports[intersect]
         } else {
-            guard let destinationPort = getRelativeNearPort(panView.center) else {
+            guard let port = getRelativeNearPort(panView.center) else {
                 fatalError("Nearest PortView nil")
             }
-            destination = destinationPort
+            destinationPort = port
         }
             
         UIView.animateKeyframes(withDuration: 0.7,
                                 delay: 0.0,
                                 options: .allowUserInteraction,
                                 animations: {
-                                    panView.center = destination!.center
-                                    if destination!.isHorizontal {
-                                        panView.rotate(angle: 90.0)
+                                    panView.center = destinationPort!.center
+                                    if destinationPort!.isHorizontal {
+                                        panView.setOrientation(.horizontal)
+                                    } else {
+                                        panView.setOrientation(.vertical)
                                     }
                                 },
                                 completion: { _ in })

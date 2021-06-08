@@ -9,13 +9,18 @@
 
 import Foundation
 
+enum Orientation {
+    case horizontal
+    case vertical
+}
+
 class MobileBarView: UIView {
   
     fileprivate var stackView: UIStackView!
     fileprivate let buttonSize: CGFloat = 40.0
     var fileOriginPoint: CGPoint!
     var ports = [Port]()
-    var rotation: CGFloat = 0.0
+    var orientation = Orientation.vertical
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,10 +32,24 @@ class MobileBarView: UIView {
         setup()
     }
     
-    func rotate(angle: CGFloat) {
+    func setOrientation(_ newOrientation: Orientation) {
+        switch orientation {
+        case .horizontal:
+            if newOrientation == .vertical {
+                rotate(angle: 90.0)
+            }
+        case .vertical:
+            if newOrientation == .horizontal {
+                rotate(angle: 270.0)
+            }
+        }
+        self.orientation = newOrientation
+    }
+    
+    fileprivate func rotate(angle: CGFloat) {
         let radians = angle / 180.0 * CGFloat.pi
-        let rotation = self.transform.rotated(by: radians)
-        self.transform = rotation
+        let affineTransformation = self.transform.rotated(by: radians)
+        self.transform = affineTransformation
     }
 
     fileprivate func setup() {
