@@ -21,15 +21,22 @@ class MobileBarView: UIView {
     var fileOriginPoint: CGPoint!
     var ports = [Port]()
     var orientation = Orientation.vertical
+    var addLayerSelector: Selector!
+    var container: UIViewController!
 
+    convenience init(frame: CGRect, vc: UIViewController, addSelector: Selector) {
+        self.init(frame: frame)
+        addLayerSelector = addSelector
+        container = vc
+        setup()
+     }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
     }
   
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setup()
     }
     
     func setOrientation(_ newOrientation: Orientation) {
@@ -85,6 +92,7 @@ class MobileBarView: UIView {
         button.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
         button.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
         button.setImage(UIImage(systemName: systemIcon), for: .normal)
+        button.addTarget(container, action: self.addLayerSelector, for: .touchUpInside)
         return button
     }
 

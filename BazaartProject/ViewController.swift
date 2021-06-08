@@ -47,7 +47,7 @@ class ViewController: UIViewController {
         setPorts()
 
         // Build the Mobile Bar
-        mobileBarView = MobileBarView(frame: CGRect(x: 0.0, y: 0.0, width: 35, height: 100))
+        mobileBarView = MobileBarView(frame: CGRect(x: 0.0, y: 0.0, width: 35, height: 100), vc: self, addSelector: #selector(addDidPressed))
         canvas.addSubview(mobileBarView)
         mobileBarView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         mobileBarView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
@@ -90,6 +90,10 @@ class ViewController: UIViewController {
 }
 
 //---Ethan-------------
+protocol Layerable {
+    
+}
+
 extension ViewController {
     //
     // Anchors
