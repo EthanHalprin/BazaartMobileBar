@@ -36,7 +36,6 @@ class ViewController: UIViewController {
             return CGPoint(x: prev.x + btn.bounds.width + margin, y: prev.y)
         }
         
-        portsManager = PortsManager(canvasView: canvas)
         setUpMobileBar()
     }
     
@@ -74,21 +73,28 @@ class ViewController: UIViewController {
     }
 }
 
+// MARK: - ViewController Extension - Setup Mobile BAr & Ports
 extension ViewController {
     
-    func setUpMobileBar() {
-        // Build Ports and add gestures
-        portsManager.portSize = canvasView.bounds.width / 5.0
+    fileprivate func setUpMobileBar() {
+        //
+        // Create Ports
+        //
+        portsManager = PortsManager(canvasView: canvasView, size: canvasView.bounds.width / 5.0)
         portsManager.setPorts()
 
+        //
         // Build the Mobile Bar
+        //
         mobileBarView = MobileBarView(frame: CGRect(x: 0.0, y: 0.0, width: 35, height: 100))
         self.canvasView.addSubview(mobileBarView)
         mobileBarView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         mobileBarView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         addPanGesture(mobileBarView)
         
+        //
         // Observe presses on MobileBar buttons
+        //
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(addDidPressed),
                                                name: Notification.Name("UserRequestAddLayer"),
@@ -102,12 +108,14 @@ extension ViewController {
                                                name: Notification.Name("UserRequestSaveLayer"),
                                                object: nil)
     }
-    func addPanGesture(_ view: UIView) {
+    
+    fileprivate func addPanGesture(_ view: UIView) {
         let pan = UIPanGestureRecognizer(target: self,
                                          action: #selector(ViewController.handlePan(sender:)))
         view.addGestureRecognizer(pan)
         view.isUserInteractionEnabled = true
     }
+    
     @objc func handlePan(sender: UIPanGestureRecognizer) {
         
         // this is the moving view
@@ -141,8 +149,8 @@ extension ViewController {
             break
         }
     }
+    
     fileprivate func checkPortsLoggings(_ panView: MobileBarView) {
-        
         var intersected: Int?
         var i = 0
         
@@ -157,7 +165,7 @@ extension ViewController {
         if let intersect = intersected {
             destinationPort = portsManager.ports[intersect]
         } else {
-            guard let port = getRelativeNearPort(panView.center) else {
+            guard let port = portsManager.getRelativeNearPort(panView.center) else {
                 fatalError("Nearest PortView nil")
             }
             destinationPort = port
@@ -176,24 +184,4 @@ extension ViewController {
                                 },
                                 completion: { _ in })
    }
-    func getRelativeNearPort(_ point: CGPoint) -> PortView? {
-        var nearest: PortView?
-        var min: CGFloat = CGFloat(Int.max)
-        
-        portsManager.ports.forEach({ port in
-            let distance = ComputeDistance(point, port.center)
-            if distance < min  {
-                min = distance
-                nearest = port
-            }
-        })
-        
-        return nearest
-    }
-    func ComputeDistance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
-        let A = abs(a.x - b.x)
-        let B = abs(a.y - b.y)
-        let C = sqrt(pow(A, 2) + pow(B, 2))
-        return C
-    }
 }

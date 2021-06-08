@@ -13,8 +13,9 @@ class PortsManager {
     var portSize: CGFloat!
     var canvas: CanvasView!
     
-    required init(canvasView: CanvasView) {
+    required init(canvasView: CanvasView, size: CGFloat) {
         canvas = canvasView
+        portSize = size
     }
     
     func setPorts() {
@@ -41,7 +42,27 @@ class PortsManager {
         // Bottom-Right
         addPort(origin: CGPoint(x: width - portSize, y: height - portSize))
     }
-    func addPort(origin: CGPoint, horizontal: Bool = false) {
+    
+    func getRelativeNearPort(_ point: CGPoint) -> PortView? {
+        var nearest: PortView?
+        var min: CGFloat = CGFloat(Int.max)
+        
+        self.ports.forEach({ port in
+            let distance = ComputeDistance(point, port.center)
+            if distance < min  {
+                min = distance
+                nearest = port
+            }
+        })
+        
+        return nearest
+    }
+}
+
+// MARK: - PortsManager Extension - Aux
+extension PortsManager {
+    
+    fileprivate func addPort(origin: CGPoint, horizontal: Bool = false) {
         let port = PortView(frame: CGRect(x: origin.x,
                                          y: origin.y,
                                          width: portSize,
@@ -55,5 +76,10 @@ class PortsManager {
         self.ports.append(port)
     }
 
-    
+    fileprivate func ComputeDistance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
+        let A = abs(a.x - b.x)
+        let B = abs(a.y - b.y)
+        let C = sqrt(pow(A, 2) + pow(B, 2))
+        return C
+    }
 }
