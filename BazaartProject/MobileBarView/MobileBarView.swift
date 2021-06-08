@@ -15,7 +15,7 @@ class MobileBarView: UIView {
     fileprivate let buttonSize: CGFloat = 40.0
     var fileOriginPoint: CGPoint!
     var ports = [Port]()
-    var isLogged = false
+    var rotation: CGFloat = 0.0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,6 +26,13 @@ class MobileBarView: UIView {
         super.init(coder: aDecoder)
         setup()
     }
+    
+    func rotate(angle: CGFloat) {
+        let radians = angle / 180.0 * CGFloat.pi
+        let rotation = self.transform.rotated(by: radians)
+        self.transform = rotation
+    }
+
 }
 
 extension MobileBarView {

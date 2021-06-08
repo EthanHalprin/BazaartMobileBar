@@ -143,7 +143,7 @@ extension ViewController {
     @objc func handlePan(sender: UIPanGestureRecognizer) {
         
         // this is the moving view
-        guard let panView = sender.view else {
+        guard let panView = sender.view, panView is MobileBarView else {
             fatalError("Pan view nil")
         }
         
@@ -169,13 +169,13 @@ extension ViewController {
             //
             // Ports Check
             //
-            checkPortsLoggings(panView)
+            checkPortsLoggings(panView as! MobileBarView)
         default:
             break
         }
     }
     
-    fileprivate func checkPortsLoggings(_ panView: UIView) {
+    fileprivate func checkPortsLoggings(_ panView: MobileBarView) {
         
         var intersected: Int?
         var i = 0
@@ -197,7 +197,10 @@ extension ViewController {
         UIView.animateKeyframes(withDuration: 0.7,
                                 delay: 0.0,
                                 options: .allowUserInteraction,
-                                animations: { panView.center = destination!.center },
+                                animations: {
+                                    panView.center = destination!.center
+                                    panView.rotate(angle: 90.0)
+                                },
                                 completion: { _ in })
    }
     
@@ -223,4 +226,8 @@ extension ViewController {
         return C
     }
 }
+
+// MARK: - UIView Extension -
+
+
 //---------------------
