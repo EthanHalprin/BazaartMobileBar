@@ -47,11 +47,25 @@ class ViewController: UIViewController {
         setPorts()
 
         // Build the Mobile Bar
-        mobileBarView = MobileBarView(frame: CGRect(x: 0.0, y: 0.0, width: 35, height: 100), vc: self, addSelector: #selector(addDidPressed))
+        mobileBarView = MobileBarView(frame: CGRect(x: 0.0, y: 0.0, width: 35, height: 100))
         canvas.addSubview(mobileBarView)
         mobileBarView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         mobileBarView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         addPanGesture(mobileBarView)
+        
+        // Observe presses on MobileBar buttons
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(addDidPressed),
+                                               name: Notification.Name("UserRequestAddLayer"),
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(deleteDidPressed),
+                                               name: Notification.Name("UserRequestDeleteLayer"),
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(saveDidPressed),
+                                               name: Notification.Name("UserRequestSaveLayer"),
+                                               object: nil)
         //---------------------
     }
     

@@ -14,6 +14,7 @@ enum Orientation {
     case vertical
 }
 
+
 class MobileBarView: UIView {
   
     fileprivate var stackView: UIStackView!
@@ -21,22 +22,16 @@ class MobileBarView: UIView {
     var fileOriginPoint: CGPoint!
     var ports = [Port]()
     var orientation = Orientation.vertical
-    var addLayerSelector: Selector!
-    var container: UIViewController!
 
-    convenience init(frame: CGRect, vc: UIViewController, addSelector: Selector) {
-        self.init(frame: frame)
-        addLayerSelector = addSelector
-        container = vc
-        setup()
-     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setup()
     }
   
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        setup()
     }
     
     func setOrientation(_ newOrientation: Orientation) {
@@ -77,23 +72,34 @@ class MobileBarView: UIView {
         stackView.axis  = NSLayoutConstraint.Axis.vertical
         stackView.distribution  = UIStackView.Distribution.equalSpacing
         stackView.alignment = UIStackView.Alignment.center
-        stackView.addArrangedSubview(buildButton("plus"))
-        stackView.addArrangedSubview(buildButton("camera"))
-        stackView.addArrangedSubview(buildButton("trash"))
+        stackView.addArrangedSubview(buildButton("plus",   selector: #selector(onAddTouchUpInside)))
+        stackView.addArrangedSubview(buildButton("camera", selector: #selector(onSaveTouchUpInside)))
+        stackView.addArrangedSubview(buildButton("trash",  selector: #selector(onDeleteTouchUpInside)))
         stackView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(stackView)
         stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         stackView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
     }
     
-    fileprivate func buildButton(_ systemIcon: String) -> UIButton {
+    fileprivate func buildButton(_ systemIcon: String, selector: Selector) -> UIButton {
         let button = UIButton()
         button.backgroundColor = UIColor.white
         button.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
         button.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
         button.setImage(UIImage(systemName: systemIcon), for: .normal)
-        button.addTarget(container, action: self.addLayerSelector, for: .touchUpInside)
+        //button.addTarget(self, action: #selector(onAddTouchUpInside), for: .touchUpInside)
+        button.addTarget(self, action: selector, for: .touchUpInside)
         return button
+    }
+    
+    @objc func onAddTouchUpInside() {
+        NotificationCenter.default.post(name: Notification.Name("UserRequestAddLayer"), object: nil)
+    }
+    @objc func onDeleteTouchUpInside() {
+        NotificationCenter.default.post(name: Notification.Name("UserRequestDeleteLayer"), object: nil)
+    }
+    @objc func onSaveTouchUpInside() {
+        NotificationCenter.default.post(name: Notification.Name("UserRequestSaveLayer"), object: nil)
     }
 
 }
