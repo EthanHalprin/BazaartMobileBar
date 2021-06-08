@@ -33,10 +33,6 @@ class MobileBarView: UIView {
         self.transform = rotation
     }
 
-}
-
-extension MobileBarView {
-      
     fileprivate func setup() {
         backgroundColor = .white
         self.layer.cornerRadius = 12.0

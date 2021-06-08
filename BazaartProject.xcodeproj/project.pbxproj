@@ -18,6 +18,7 @@
 		5CB0095426552F30009806C0 /* CanvasView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB0095326552F30009806C0 /* CanvasView.m */; };
 		5CB009592655322C009806C0 /* CanvasLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB009582655322C009806C0 /* CanvasLayer.swift */; };
 		AA4DC99D266E924400CABE20 /* MobileBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4DC99C266E924400CABE20 /* MobileBarView.swift */; };
+		AA5F0CB8266FB42800B403B9 /* PortView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5F0CB7266FB42800B403B9 /* PortView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		5CB0095326552F30009806C0 /* CanvasView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CanvasView.m; sourceTree = "<group>"; };
 		5CB009582655322C009806C0 /* CanvasLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasLayer.swift; sourceTree = "<group>"; };
 		AA4DC99C266E924400CABE20 /* MobileBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileBarView.swift; sourceTree = "<group>"; };
+		AA5F0CB7266FB42800B403B9 /* PortView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 				5CB0092126552DC9009806C0 /* LaunchScreen.storyboard */,
 				5CB0092426552DC9009806C0 /* Info.plist */,
 				5CB0095126552F2F009806C0 /* BazaartProject-Bridging-Header.h */,
+				AA5F0CB7266FB42800B403B9 /* PortView.swift */,
 			);
 			path = BazaartProject;
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 			files = (
 				AA4DC99D266E924400CABE20 /* MobileBarView.swift in Sources */,
 				5CB0091B26552DC1009806C0 /* ViewController.swift in Sources */,
+				AA5F0CB8266FB42800B403B9 /* PortView.swift in Sources */,
 				5CB009592655322C009806C0 /* CanvasLayer.swift in Sources */,
 				5CB0091726552DC1009806C0 /* AppDelegate.swift in Sources */,
 				5CB0095426552F30009806C0 /* CanvasView.m in Sources */,

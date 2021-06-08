@@ -14,8 +14,10 @@ class ViewController: UIViewController {
     //---Ethan-------------
     var mobileBarView: MobileBarView!
     var mbvOriginPoint: CGPoint!
-    var ports = [Port]()
+    var ports = [PortView]()
     var portSize: CGFloat!
+    var horiztalPointTop = CGPoint.zero
+    var horiztalPointBottom = CGPoint.zero
     //---------------------
 
     override func viewDidAppear(_ animated: Bool) {
@@ -88,7 +90,6 @@ class ViewController: UIViewController {
 }
 
 //---Ethan-------------
-typealias Port = UIView
 extension ViewController {
     //
     // Anchors
@@ -104,6 +105,8 @@ extension ViewController {
         addPort(origin: CGPoint.zero)
         // Top-Middle
         addPort(origin: CGPoint(x: width / 2.0 - portSize / 2.0, y: 0))
+        horiztalPointTop.x = width / 2.0 - portSize / 2.0
+        horiztalPointTop.y = 0
         // Top-Right
         addPort(origin: CGPoint(x: width - portSize, y: 0))
         // Middle-Left
@@ -114,12 +117,14 @@ extension ViewController {
         addPort(origin: CGPoint(x: 0, y: height - portSize))
         // Bottom-Middle
         addPort(origin: CGPoint(x: width / 2.0 - portSize / 2.0, y: height - portSize))
+        horiztalPointBottom.x = width / 2.0 - portSize / 2.0
+        horiztalPointBottom.y = height - portSize
         // Bottom-Right
         addPort(origin: CGPoint(x: width - portSize, y: height - portSize))
     }
     
     func addPort(origin: CGPoint) {
-        let port1 = UIView(frame: CGRect(x: origin.x,
+        let port1 = PortView(frame: CGRect(x: origin.x,
                                          y: origin.y,
                                          width: portSize,
                                          height: portSize))
@@ -187,11 +192,14 @@ extension ViewController {
                 i += 1
             }
         }
-        var destination: Port?
+        var destination: PortView?
         if let intersect = intersected {
             destination = self.ports[intersect]
         } else {
-            destination = getRelativeNearPort(panView.center)
+            guard let destinationPort = getRelativeNearPort(panView.center) else {
+                fatalError("Nearest PortView nil")
+            }
+            destination = destinationPort
         }
             
         UIView.animateKeyframes(withDuration: 0.7,
@@ -204,8 +212,8 @@ extension ViewController {
                                 completion: { _ in })
    }
     
-    func getRelativeNearPort(_ point: CGPoint) -> Port {
-        var nearest = Port()
+    func getRelativeNearPort(_ point: CGPoint) -> PortView? {
+        var nearest: PortView?
         var min: CGFloat = CGFloat(Int.max)
         
         self.ports.forEach({ port in
@@ -227,7 +235,6 @@ extension ViewController {
     }
 }
 
-// MARK: - UIView Extension -
-
+// MARK: - Port Extension -
 
 //---------------------
