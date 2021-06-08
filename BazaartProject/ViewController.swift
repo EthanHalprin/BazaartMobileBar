@@ -11,13 +11,9 @@ class ViewController: UIViewController {
 
     private var canvasView: CanvasView!
     
-    //-------------------------------------
+    //----Mobile Bar View------------------
     var mobileBarView: MobileBarView!
-    var mbvOriginPoint: CGPoint!
-    var ports = [PortView]()
-    var portSize: CGFloat!
-    var horiztalPointTop = CGPoint.zero
-    var horiztalPointBottom = CGPoint.zero
+    var portsManager: PortsManager!
     //-------------------------------------
 
     override func viewDidAppear(_ animated: Bool) {
@@ -40,6 +36,7 @@ class ViewController: UIViewController {
             return CGPoint(x: prev.x + btn.bounds.width + margin, y: prev.y)
         }
         
+        portsManager = PortsManager(canvasView: canvas)
         setUpMobileBar()
     }
     
@@ -78,10 +75,11 @@ class ViewController: UIViewController {
 }
 
 extension ViewController {
+    
     func setUpMobileBar() {
         // Build Ports and add gestures
-        portSize = canvasView.bounds.width / 5.0
-        setPorts()
+        portsManager.portSize = canvasView.bounds.width / 5.0
+        portsManager.setPorts()
 
         // Build the Mobile Bar
         mobileBarView = MobileBarView(frame: CGRect(x: 0.0, y: 0.0, width: 35, height: 100))
@@ -103,43 +101,6 @@ extension ViewController {
                                                selector: #selector(saveDidPressed),
                                                name: Notification.Name("UserRequestSaveLayer"),
                                                object: nil)
-    }
-    func setPorts() {
-        guard let _ = self.portSize else {
-            fatalError("Port size nil")
-        }
-        let width  = canvasView.bounds.width
-        let height = canvasView.bounds.height
-        
-        // Top-Left
-        addPort(origin: CGPoint.zero)
-        // Top-Middle
-        addPort(origin: CGPoint(x: width / 2.0 - portSize / 2.0, y: 0), horizontal: true)
-        // Top-Right
-        addPort(origin: CGPoint(x: width - portSize, y: 0))
-        // Middle-Left
-        addPort(origin: CGPoint(x: 0, y: height / 2.0 - portSize / 2.0))
-        // Middle-Right
-        addPort(origin: CGPoint(x: width - portSize, y: height / 2.0 - portSize / 2.0))
-        // Bottom-Left
-        addPort(origin: CGPoint(x: 0, y: height - portSize))
-        // Bottom-Middle
-        addPort(origin: CGPoint(x: width / 2.0 - portSize / 2.0, y: height - portSize), horizontal: true)
-        // Bottom-Right
-        addPort(origin: CGPoint(x: width - portSize, y: height - portSize))
-    }
-    func addPort(origin: CGPoint, horizontal: Bool = false) {
-        let port = PortView(frame: CGRect(x: origin.x,
-                                         y: origin.y,
-                                         width: portSize,
-                                         height: portSize))
-        port.backgroundColor = UIColor.yellow
-        port.layer.cornerRadius = 12
-        port.layer.borderWidth = 2
-        port.layer.borderColor = UIColor.black.cgColor
-        port.isHorizontal = horizontal
-        canvasView.addSubview(port)
-        self.ports.append(port)
     }
     func addPanGesture(_ view: UIView) {
         let pan = UIPanGestureRecognizer(target: self,
@@ -171,7 +132,6 @@ extension ViewController {
             // reset translation
             sender.setTranslation(CGPoint.zero, in: self.canvasView)
             
-            
         case .ended:
             //
             // Ports Check
@@ -186,8 +146,8 @@ extension ViewController {
         var intersected: Int?
         var i = 0
         
-        while intersected == nil && i<ports.count {
-            if panView.frame.intersects(ports[i].frame) {
+        while intersected == nil && i<portsManager.ports.count {
+            if panView.frame.intersects(portsManager.ports[i].frame) {
                 intersected = i
             } else {
                 i += 1
@@ -195,7 +155,7 @@ extension ViewController {
         }
         var destinationPort: PortView?
         if let intersect = intersected {
-            destinationPort = self.ports[intersect]
+            destinationPort = portsManager.ports[intersect]
         } else {
             guard let port = getRelativeNearPort(panView.center) else {
                 fatalError("Nearest PortView nil")
@@ -220,7 +180,7 @@ extension ViewController {
         var nearest: PortView?
         var min: CGFloat = CGFloat(Int.max)
         
-        self.ports.forEach({ port in
+        portsManager.ports.forEach({ port in
             let distance = ComputeDistance(point, port.center)
             if distance < min  {
                 min = distance
