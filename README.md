@@ -8,7 +8,7 @@ Just a UIView Inherited class with a isHorizontal boolean. Port Job is to
 represent a rectangular corner on canvas (one of 8) that the mobile bar view 
 can attach to
 
-### PortView
+### PortsManager
 Class to handle the ports:
 
    - Creation of all ports on canvas (and apply which one are horizontal (2 of them))
